@@ -1,0 +1,142 @@
+@startuml
+class GradiusAdvance
+{
+-int Nave[4]
+-int Zona[8]
+}
+class Nave
+{
+-int ubicacionX
+-int ubicacionY
+-int vidaRestante
+-int nivelLaser
+-int nivelSatelite
+-int escudo
+-int nivelMisil
+-int nivelVelocidad
+}
+class Escenario
+class Puntuacion
+{
+-int puntaje
++PuntuacionActual(puntaje)
++PuntuacionAlta()
+}
+class Posicion
+{
++Posicion: Desplazar(x,y)
+}
+class Enemigo
+{
+-Enemigo Vida[1]
++Enemigo: Disparo()
++Enemigo: LocalizarNave(x,y)
+}
+class MovimientoPantalla
+{
++Desplazamiento(x,y)
+}
+class Animacion
+{
++Reproducir()
+}
+class Mejora
+{
++Mejora: Velocidad(ModuloRojo=1)
++Mejora: Misil(ModuloRojo=2)
++Mejora: Laser(ModuloRojo=3)
++Mejora: Satelite(ModuloRojo=4)
++Mejora: Escudo(ModuloRojo=5)
+}
+class Menu
+{
++Menu: MostrarMenu()
+}
+class Pausa
+{
++Pausa: DetenerTiempo()
+}
+class Obstaculo
+{
++Obstaculo: tamanio(x,y)
+}
+class Disparo
+{
++Disparo: Lanzar(Accion)
+}
+class Misil
+class Laser
+class Satelite
+class Escudo
+class Velocidad
+
+class Rompible
+{
++ReducirDuracion(Disparo)
+}
+class Gravedad
+{
++Gravedad: Caida(x,y)
+}
+class Proyectil
+{
++Proyectil: Lanzar(x,y)
+}
+class Jefe
+{
+-int Escudo[8]
+-int Nucleo[1...8]
+}
+class ModuloRojo
+{
+-int Cantidad[5]
++ModuloRojo: Obtener(x,y)
+}
+class ModuloAzul
+{
+-int Cantidad[1]
++ModuloAzul: Obtener(x,y)
+}
+class Vida
+{
++Vida: Reducir()
+}
+
+GradiusAdvance *-- "4" Nave
+GradiusAdvance *-- "8" Escenario
+GradiusAdvance *-- Puntuacion
+GradiusAdvance *-- "6" Enemigo
+GradiusAdvance *-- Menu
+GradiusAdvance *-- Pausa
+
+Nave *-- Posicion
+Nave *-- "1...9"Vida
+Nave *-- Mejora
+Nave *-- Animacion
+Nave *-- Disparo
+Nave o-- ModuloAzul
+Mejora o-- ModuloRojo
+Mejora <|-- Misil
+Misil *-- Gravedad
+Misil <|-- Proyectil
+Mejora <|-- Laser
+Mejora <|-- Satelite
+Mejora <|-- Escudo
+Mejora <|-- Velocidad
+
+Escenario o-- MovimientoPantalla
+Escenario *-- Animacion
+Escenario *-- Obstaculo
+Escenario *-- Jefe
+
+Enemigo <|-- Jefe
+Enemigo *-- Disparo
+
+Obstaculo <|-- Rompible
+obstaculo *-- Gravedad
+Obstaculo *-- Animacion
+Disparo *-- Animacion
+Disparo o-- Proyectil
+
+
+@enduml
