@@ -3,11 +3,11 @@
 class Foco
 {
 private:
-    EstadoFoco Estado;
+    EstadoFoco estado;
 
 public:
-    void Encender(){};
-    void Apagar(){};
     Foco() {};
     ~Foco() {};
+    void Encender() {};
+    void Apagar() {};
 };
