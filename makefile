@@ -9,3 +9,9 @@ bin/memoria : src/memoria.cpp
 
 runMemoria : bin/memoria
 	./bin/memoria
+
+src/ejemplo : src/ejemplo.cpp
+	c++ src/ejemplo.cpp -o bin/ejemplo -lftxui-screen -lftxui-dom -lftxui-component
+
+runejemplo : bin/ejemplo
+	./bin/ejemplo
