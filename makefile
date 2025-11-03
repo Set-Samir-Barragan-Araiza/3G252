@@ -15,3 +15,21 @@ src/ejemplo : src/ejemplo.cpp
 
 runejemplo : bin/ejemplo
 	./bin/ejemplo
+
+run : bin/animacion
+	./bin/animacion
+
+bin/animacion : src/animacion.cpp include/*.hpp
+	@mkdir -p bin
+	g++ -Iinclude -o bin/animacion src/animacion.cpp -lftxui-component -lftxui-dom -lftxui-screen
+
+# New target to build the top-level Animacion.cpp (uppercase) and a convenient build alias
+.PHONY: build runAnimacion
+build: bin/Animacion
+
+bin/Animacion: Animacion.cpp include/*.hpp
+	@mkdir -p bin
+	g++ -std=c++20 -Iinclude -o bin/Animacion Animacion.cpp -lftxui-component -lftxui-dom -lftxui-screen -pthread
+
+runAnimacion: bin/Animacion
+	./bin/Animacion

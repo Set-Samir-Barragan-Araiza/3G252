@@ -1,26 +1,67 @@
-#pragma once//indica que este archivo solo se incluirá una vez durante la compilación para evitar errores de redefinición
-#include <vector>//incluye la biblioteca vector para usar vetores en el programa
-#include "Dibujo.hpp"//incluye la clase dibujo para guardar cadenas de texto y dibujar figuras en la pantalla
-#include <ftxui/screen/screen.hpp>//incluye la biblioteca ftxui para crear una pantalla en la consola
+#pragma once
+#include <algorithm>
+#include <vector>
+#include "Dibujo.hpp"
+#include <ftxui/screen/screen.hpp>
 
-class GestorDibujos {//clase para gestionar los dibujos en la pantalla: moverlos, agregarlos 
+// Clase para gestionar los dibujos en la pantalla: moverlos, agregarlos
+class GestorDibujos
+{
 public:
-    std::vector<Dibujo> dibujos;//vector para almacenar los dibujos que se van a mostrar en la pantalla
+    std::vector<Dibujo> dibujos; // vector para almacenar los dibujos que se van a mostrar en la pantalla
 
-    void Agregar(const Dibujo& dibujo) {//funcion para agregar un dibujo al vector de dibujos
-        dibujos.push_back(dibujo);//permite el desplazamiento del dibujo en la pantalla
+    void Agregar(const Dibujo &dibujo)
+    {
+        dibujos.emplace_back(dibujo);
     }
-
-    void Mover(size_t idx, int dx, int dy) {//funcion para desplazar un dibujo en la pantalla
-        if (idx < dibujos.size()) {//verifica que el indice del dibujo a mover sea valido
-            dibujos[idx].x += dx;//desplaza el dibujo en el eje x sumando el valor de dx al valor actual de x del dibujo
-            dibujos[idx].y += dy;//desplaza el dibujo en el eje y sumando el valor de dy al valor actual de y del dibujo
+    void AgregarDibujo(const Dibujo &dibujo)
+    {
+        Agregar(dibujo);
+    }
+    size_t Size() const noexcept
+    {
+        return dibujos.size();
+    }
+    const Dibujo *ObtenerDibujo(size_t idx) const
+    {
+        if (idx < dibujos.size())
+            return &dibujos[idx];
+        return nullptr;
+    }
+    bool SetPositionClamped(size_t idx, int x, int y, int max_x, int max_y)
+    {
+        if (idx >= dibujos.size())
+            return false;
+        int nx = std::clamp(x, 0, max_x);
+        int ny = std::clamp(y, 0, max_y);
+        dibujos[idx].x = nx;
+        dibujos[idx].y = ny;
+        return true;
+    }
+    void Mover(size_t idx, int dx, int dy)
+    {
+        if (idx < dibujos.size())
+        {
+            dibujos[idx].x += dx;
+            dibujos[idx].y += dy;
+        }
+    }
+    void MoverClamped(size_t idx, int dx, int dy, int max_x, int max_y)
+    {
+        if (idx < dibujos.size())
+        {
+            int nx = std::clamp(dibujos[idx].x + dx, 0, max_x);
+            int ny = std::clamp(dibujos[idx].y + dy, 0, max_y);
+            dibujos[idx].x = nx;
+            dibujos[idx].y = ny;
         }
     }
 
-    void DibujarTodos(ftxui::Screen& screen) const {//funcion para dibujar todos los dibujos almacenados 
-        for (const auto& dibujo : dibujos) {//ciclo para recorrer cada dibujo almacenado en el vector de dibujos
-            dibujo.Dibujar(screen);//llama a la funcion Dibujar de cada dibujo para mostrarlo en la pantalla usando el objeto screen
+    void DibujarTodos(ftxui::Screen &screen) const
+    {
+        for (const auto &dibujo : dibujos)
+        {
+            dibujo.Dibujar(screen);
         }
     }
 };
